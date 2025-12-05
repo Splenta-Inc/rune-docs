@@ -4,6 +4,7 @@
 
 # Platform
 
+- [Platform Features & Flow](./features.md)
 - [Architecture](./architecture.md)
 - [Data Flow](./data-flow.md)
 

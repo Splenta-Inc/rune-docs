@@ -80,7 +80,7 @@ Current implementation status across all Rune platform components.
 | View tree rendering | ✅ Done |
 | HMR support | ✅ Done |
 | Routing/navigation | 🔨 Partial |
-
+| IR → PDF backend (pdf-writer) | 🔨 Behind `pdf-export` feature |
 ---
 
 ## Server Runtime (rune-server)
