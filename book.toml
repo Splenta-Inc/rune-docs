@@ -1,0 +1,14 @@
+[book]
+title = "Rune Platform"
+authors = ["Partha"]
+language = "en"
+src = "src"
+
+[build]
+build-dir = "book"
+
+[output.html]
+default-theme = "light"
+preferred-dark-theme = "navy"
+git-repository-url = "https://github.com/user/rune-docs"
+edit-url-template = "https://github.com/user/rune-docs/edit/main/{path}"
