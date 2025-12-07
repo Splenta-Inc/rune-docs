@@ -20,6 +20,7 @@
 - [Overview](./server/overview.md)
 - [Host Functions](./server/host-functions.md)
 - [Services](./server/services.md)
+- [Rune Push Service (RPS)](./rps-design.md)
 
 # WAID Compiler
 
