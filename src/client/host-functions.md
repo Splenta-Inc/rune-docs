@@ -17,6 +17,10 @@ Host functions are imports provided by the runtime that WASM modules can call. T
 | `get_time_ms` | Direct | ✅ Implemented | |
 | `get_random` | Direct | ✅ Implemented | Simple LCG, not crypto |
 | `uuid_v4` | Direct | ✅ Implemented | |
+| `json_parse` | Direct | ✅ Implemented | Validates JSON and normalizes to return buffer |
+| `json_stringify` | Direct | ✅ Implemented | Stringifies JSON or raw strings into return buffer |
+| `text_encode` | Direct | ✅ Implemented | UTF-8 encode into return buffer |
+| `text_decode` | Direct | ✅ Implemented | UTF-8 decode into return buffer |
 | `read_return_buffer` | Direct | ✅ Implemented | For string returns |
 | `core_dispatch_mutation` | Routed | ✅ Implemented | |
 | `update_data` | Routed | 🔨 Via dispatch | |
@@ -98,12 +102,43 @@ export function loadTheme(): string {
 rune.get_time_ms(): i64      // Unix timestamp in milliseconds
 rune.get_random(): f64       // Random number 0.0-1.0
 rune.uuid_v4(): string       // Random UUID v4
+// UTF-8 helpers
+rune.text_encode(str: string): Uint8Array
+rune.text_decode(bytes: Uint8Array): string
 ```
 
 **WASM signatures:**
 - `get_time_ms() -> i64`
 - `get_random() -> f64`
 - `uuid_v4() -> (has_value: i32, len: i32)` (use `read_return_buffer` to get string)
+- `json_parse(ptr: i32, len: i32) -> (has_value: i32, len: i32)` (normalized JSON in return buffer)
+- `json_stringify(ptr: i32, len: i32) -> (has_value: i32, len: i32)` (JSON string in return buffer)
+- `text_encode(ptr: i32, len: i32) -> (has_value: i32, len: i32)` (UTF-8 bytes in return buffer)
+- `text_decode(ptr: i32, len: i32) -> (has_value: i32, len: i32)` (UTF-8 string in return buffer)
+
+### JSON Helpers
+
+Use host-backed helpers for JSON operations without a JS runtime. Both functions write results into the return buffer and report availability with `(has_value, len)`.
+
+```typescript
+// Parses and normalizes a JSON string. Returns 0/0 on invalid JSON.
+const [ok, len] = rune.json_parse(ptr, len);
+
+// Serializes JSON (or raw string input) into a JSON string.
+const [ok, len] = rune.json_stringify(ptr, len);
+```
+
+### Text Encoding/Decoding
+
+UTF-8 encode/decode helpers to mirror TextEncoder/TextDecoder. Results are written to the return buffer; use `read_return_buffer` to copy them into guest memory.
+
+```typescript
+// Encode a string to bytes
+const [ok, len] = rune.text_encode(ptr, len);
+
+// Decode bytes back to a string
+const [ok, len] = rune.text_decode(ptr, len);
+```
 
 ---
 
